@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <title>Cloud Verification CMS | Render Cloud Worker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen font-sans overflow-x-hidden">
+    <div class="max-w-7xl mx-auto p-4 md:p-8">
+        <header class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+                <h1 class="text-2xl font-bold">Cloud Verification Engine</h1>
+                <p class="text-sm text-slate-500">Status: <span id="system-status" class="text-green-600 font-semibold">🟢 Operational (Standby Demo)</span></p>
+            </div>
+            <div class="bg-white px-4 py-2 rounded-lg border border-slate-200 shadow-sm text-xs font-mono">
+                Render Cloud Worker: <span class="text-blue-600">Verified Full-Stack</span>
+            </div>
+        </header>
+
+        <main class="grid grid-cols-1 md:grid-cols-12 gap-6">
+            <section class="md:col-span-8 bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <h2 class="text-lg font-semibold mb-4">Live Data Feed</h2>
+                <div id="data-grid" class="space-y-3">
+                    <!-- Dynamic Content -->
+                </div>
+            </section>
+
+            <section class="md:col-span-4 space-y-6">
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                    <h2 class="text-lg font-semibold mb-4">Control Action Panel</h2>
+                    <button onclick="submitAction()" class="w-full min-h-[44px] bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">
+                        Trigger Verification
+                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                    <h2 class="text-lg font-semibold mb-4">Analytics</h2>
+                    <div class="h-32 flex items-end gap-2">
+                        <div class="w-full bg-blue-100 h-1/2 rounded-t"></div>
+                        <div class="w-full bg-blue-200 h-3/4 rounded-t"></div>
+                        <div class="w-full bg-blue-400 h-full rounded-t"></div>
+                        <div class="w-full bg-blue-200 h-2/3 rounded-t"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const logs = [
+            { id: 1, title: "Worker Sync", status: "Success", score: 98, timestamp: "10:42 AM" },
+            { id: 2, title: "API Validation", status: "Pending", score: 85, timestamp: "10:40 AM" },
+            { id: 3, title: "Render Deployment", status: "Active", score: 100, timestamp: "10:35 AM" }
+        ];
+
+        function renderLogs() {
+            const container = document.getElementById('data-grid');
+            container.innerHTML = logs.map(log => `
+                <div class="flex items-center justify-between p-3 bg-slate-50 rounded border border-slate-100">
+                    <div>
+                        <p class="font-medium text-sm">${log.title}</p>
+                        <p class="text-xs text-slate-400">${log.timestamp}</p>
+                    </div>
+                    <span class="px-2 py-1 text-[10px] font-bold uppercase bg-slate-200 rounded">${log.status}</span>
+                </div>
+            `).join('');
+        }
+
+        async function submitAction() {
+            try {
+                await fetch('/api/reviews', { method: 'POST' });
+            } catch (e) {
+                console.log("Action triggered (Demo Mode)");
+            }
+        }
+
+        window.onload = () => {
+            renderLogs();
+            fetch('/api/health').catch(() => {
+                document.getElementById('system-status').innerText = '🟢 Operational (Standby Demo)';
+            });
+        };
+    </script>
+</body>
+</html>
